@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% load ui %}
+{% block title %}About — {{ site.agency_name }}{% endblock %}
+{% block content %}
+<section class="phead">
+  <div class="wrap">
+    <h1 class="h1">About {{ site.short_name }}</h1>
+    <p class="lede lede--wide">{{ site.about_text }}</p>
+    <dl class="facts facts--inline">
+      <div><dt>Clients</dt><dd>{{ site.clients_count }}</dd></div>
+      <div><dt>Countries</dt><dd>{{ site.countries_count }}</dd></div>
+      <div><dt>Industries</dt><dd>{{ industries|length }}</dd></div>
+      <div><dt>Services</dt><dd>{{ services|length }}</dd></div>
+    </dl>
+    {% if site.countries_text %}<p class="muted">Clients in {{ site.countries_text }}.</p>{% endif %}
+  </div>
+</section>
+
+<section class="sec sec--tint">
+  <div class="wrap split">
+    <div class="split__aside">
+      <h2 class="h2">One team from build to growth</h2>
+      <p class="lede">Most businesses juggle a web developer, an SEO freelancer and someone for automation. We cover all of it, so nothing falls between the gaps.</p>
+    </div>
+    <ul class="svc-list">
+      {% for s in services %}
+      <li><a class="svc" href="{{ s.get_absolute_url }}"><span class="svc__icon">{% icon s.icon 22 %}</span><span class="svc__body"><span class="svc__title">{{ s.title }}</span><span class="svc__sum">{{ s.summary }}</span></span>{% icon 'chevron' 18 'svc__chev' %}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec__head"><h2 class="h2">Who we work with</h2></div>
+    <ul class="inds">{% for i in industries %}<li class="ind"><span class="ind__icon">{% icon i.icon 22 %}</span><h3>{{ i.name }}</h3><p>{{ i.blurb }}</p></li>{% endfor %}</ul>
+  </div>
+</section>
+{% include "core/partials/cta_band.html" %}
+{% endblock %}

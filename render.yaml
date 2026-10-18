@@ -1,0 +1,24 @@
+# Free deploy on Render: New → Blueprint → pick this repo.
+# You'll be asked for the values marked "sync: false" (database URL and admin login).
+services:
+  - type: web
+    name: vaishnav-creations
+    runtime: python
+    plan: free
+    buildCommand: bash build.sh
+    startCommand: gunicorn config.wsgi --workers 2 --timeout 60
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DJANGO_DEBUG
+        value: "0"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL            # paste the connection string from neon.tech
+        sync: false
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false

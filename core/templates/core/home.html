@@ -1,0 +1,270 @@
+{% extends "core/base.html" %}
+{% load ui %}
+{% block head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for f in faqs %}{"@type":"Question","name":{{ f.question|jsonld }},"acceptedAnswer":{"@type":"Answer","text":{{ f.answer|jsonld }}}}{% if not forloop.last %},{% endif %}{% endfor %}]}
+</script>
+{% endblock %}
+{% block content %}
+
+{# ── HERO ─────────────────────────────────────────────── #}
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <h1 class="hero__title">{{ site.hero_title }}</h1>
+      <p class="hero__sub">{{ site.hero_subtitle }}</p>
+      <div class="hero__ctas">
+        <a class="btn btn--primary btn--lg" href="{% url 'contact' %}">Start a project</a>
+        <a class="btn btn--wa btn--lg" href="{{ site.whatsapp_link }}" target="_blank" rel="noopener">{% icon 'whatsapp' 18 %}Message on WhatsApp</a>
+      </div>
+      <dl class="facts">
+        <div><dt>Clients</dt><dd>{{ site.clients_count }}</dd></div>
+        <div><dt>Countries</dt><dd>{{ site.countries_count }}</dd></div>
+        <div><dt>Industries</dt><dd>{{ industries|length }}</dd></div>
+      </dl>
+    </div>
+
+    {% if hero_work %}
+    <aside class="shipped" aria-labelledby="shipped-h">
+      <div class="shipped__head">
+        <h2 id="shipped-h">Client sites we've built</h2>
+        <span class="live"><i></i>{{ hero_work|length }} live</span>
+      </div>
+      <ul class="shipped__list">
+        {% for w in hero_work %}
+        <li>
+          <a href="{{ w.live_url }}" target="_blank" rel="noopener" class="shipped__row">
+            <span class="dot" aria-hidden="true"></span>
+            <span class="shipped__main">
+              <span class="shipped__domain">{{ w.domain }}</span>
+              <span class="shipped__meta">{{ w.client_name }}{% if w.industry %}, {{ w.industry.name|lower }}{% endif %}{% if w.location %} in {{ w.location }}{% endif %}</span>
+            </span>
+            {% icon 'external' 16 'shipped__ext' %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <a class="shipped__all" href="{% url 'work' %}">See all client work</a>
+    </aside>
+    {% endif %}
+  </div>
+</section>
+
+{# ── CLIENTS ──────────────────────────────────────────── #}
+{% if clients %}
+<section class="clients" aria-labelledby="clients-h">
+  <div class="wrap">
+    <h2 id="clients-h" class="clients__h">Trusted by {{ site.clients_count }} businesses, including</h2>
+    <ul class="clients__row">
+      {% for c in clients %}
+      <li>
+        {% if c.live_url %}<a href="{{ c.live_url }}" target="_blank" rel="noopener" class="client" title="{{ c.summary }}">{% else %}<span class="client">{% endif %}
+          {% if c.logo_url %}<img src="{{ c.logo_url }}" alt="{{ c.client_name }}" loading="lazy" class="client__logo{% if c.logo_on_light_plate %} client__logo--plate{% endif %}">
+          {% else %}<span class="client__word">{{ c.client_name }}</span>{% endif %}
+        {% if c.live_url %}</a>{% else %}</span>{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endif %}
+
+{# ── SERVICES ─────────────────────────────────────────── #}
+<section class="sec" aria-labelledby="svc-h">
+  <div class="wrap split">
+    <div class="split__aside">
+      <h2 id="svc-h" class="h2">What we do</h2>
+      <p class="lede">Build, automate and grow — one team for your website, the systems behind it and the search work that brings customers in.</p>
+      <a class="link" href="{% url 'services' %}">All services in detail</a>
+    </div>
+    <ul class="svc-list">
+      {% for s in services %}
+      <li>
+        <a class="svc" href="{{ s.get_absolute_url }}">
+          <span class="svc__icon">{% icon s.icon 22 %}</span>
+          <span class="svc__body">
+            <span class="svc__title">{{ s.title }}</span>
+            <span class="svc__sum">{{ s.summary }}</span>
+          </span>
+          <span class="tag tag--{{ s.billing }}">{{ s|billing_short }}</span>
+          {% icon 'chevron' 18 'svc__chev' %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{# ── SEARCH: SEO / GEO / AEO ─────────────────────────── #}
+<section class="sec sec--tint" aria-labelledby="search-h">
+  <div class="wrap">
+    <div class="sec__head">
+      <h2 id="search-h" class="h2">Be found on Google and in AI answers</h2>
+      <p class="lede">Customers now search in three places. Our monthly SEO, GEO and AEO plan covers all of them.</p>
+    </div>
+    <div class="search3">
+      <article class="sx">
+        <div class="sx__demo sx__demo--serp" aria-hidden="true">
+          <div class="serp__q">{% icon 'search' 14 %}interior designer in jaipur</div>
+          <div class="serp__r serp__r--you"><b>Your business</b><span>yourbusiness.com</span></div>
+          <div class="serp__r"><b></b><span></span></div>
+          <div class="serp__r"><b></b><span></span></div>
+        </div>
+        <h3>SEO</h3>
+        <p>Rank higher in Google search and Maps through technical fixes, on-page work, local SEO and content.</p>
+      </article>
+      <article class="sx">
+        <div class="sx__demo sx__demo--ai" aria-hidden="true">
+          <div class="ai__q">Which law firm in Navi Mumbai handles cyber crime cases?</div>
+          <div class="ai__a">{% icon 'spark' 14 %}<span>You could contact <b>Your business</b>, which offers …</span></div>
+        </div>
+        <h3>GEO</h3>
+        <p>Generative engine optimisation helps ChatGPT, Gemini and Perplexity understand and recommend your business.</p>
+      </article>
+      <article class="sx">
+        <div class="sx__demo sx__demo--answer" aria-hidden="true">
+          <div class="ans__label">Featured answer</div>
+          <div class="ans__text">Most hotels allow early check-in on request, subject to availability …</div>
+          <div class="ans__src">yourbusiness.com</div>
+        </div>
+        <h3>AEO</h3>
+        <p>Answer engine optimisation structures your content so it's picked as the direct answer and for voice search.</p>
+      </article>
+    </div>
+    <div class="search__foot">
+      <p>Every month: audit and fixes, keyword and question research, schema markup, Google Business Profile, new content, AI-visibility checks and a clear report.</p>
+      <a class="btn btn--primary" href="{% url 'service_detail' 'seo-geo-aeo' %}">See the monthly plan</a>
+    </div>
+  </div>
+</section>
+
+{# ── AUTOMATION ───────────────────────────────────────── #}
+<section class="sec" aria-labelledby="auto-h">
+  <div class="wrap auto">
+    <div class="auto__copy">
+      <h2 id="auto-h" class="h2">Let automation handle the repetitive work</h2>
+      <p class="lede">We provide complete n8n services — installation, hosting, workflow design and monthly support — plus WhatsApp and AI chatbots that reply to customers instantly.</p>
+      <ul class="ticks">
+        <li>{% icon 'check' 18 %}Every enquiry lands in your CRM and on WhatsApp</li>
+        <li>{% icon 'check' 18 %}Automatic follow-ups, reminders and reports</li>
+        <li>{% icon 'check' 18 %}Self-hosted on your server or on n8n Cloud</li>
+      </ul>
+      <div class="btn-row">
+        <a class="btn btn--primary" href="{% url 'service_detail' 'n8n-automation' %}">n8n automation</a>
+        <a class="btn btn--ghost" href="{% url 'service_detail' 'whatsapp-ai-chatbots' %}">WhatsApp chatbots</a>
+      </div>
+    </div>
+
+    <figure class="flow" aria-label="Example workflow: a website enquiry goes through n8n to your CRM, WhatsApp and Google Sheets">
+      <div class="flow__col flow__col--in">
+        <div class="node">{% icon 'globe' 18 %}<span>Website form</span></div>
+        <div class="node">{% icon 'chat' 18 %}<span>WhatsApp message</span></div>
+      </div>
+      <div class="flow__hub">
+        <div class="node node--hub">{% icon 'flow' 20 %}<span>n8n</span><small>checks, sorts, adds AI summary</small></div>
+      </div>
+      <div class="flow__col flow__col--out">
+        <div class="node">{% icon 'database' 18 %}<span>CRM</span></div>
+        <div class="node">{% icon 'whatsapp' 18 %}<span>Team alert</span></div>
+        <div class="node">{% icon 'chart' 18 %}<span>Google Sheet</span></div>
+      </div>
+      <figcaption>A typical first workflow</figcaption>
+    </figure>
+  </div>
+
+  {% if bots %}
+  <div class="wrap bots">
+    <h3 class="h3">Chatbots we've built — try them live on WhatsApp</h3>
+    <div class="bots__grid">
+      {% for b in bots %}
+      <a class="bot" href="{{ b.live_url }}" target="_blank" rel="noopener">
+        <span class="bot__icon">{% icon 'whatsapp' 22 %}</span>
+        <span class="bot__body">
+          <span class="bot__title">{{ b.client_name }}</span>
+          <span class="bot__sum">{{ b.summary }}</span>
+        </span>
+        <span class="bot__cta">{{ b.link_label|default:"Try the bot" }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</section>
+
+{# ── INDUSTRIES ───────────────────────────────────────── #}
+<section class="sec sec--tint" aria-labelledby="ind-h">
+  <div class="wrap">
+    <div class="sec__head">
+      <h2 id="ind-h" class="h2">Industries we work with</h2>
+      <p class="lede">We've delivered projects for businesses in these sectors and understand how their customers search and buy.</p>
+    </div>
+    <ul class="inds">
+      {% for i in industries %}
+      <li class="ind">
+        <span class="ind__icon">{% icon i.icon 22 %}</span>
+        <h3>{{ i.name }}</h3>
+        <p>{{ i.blurb }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{# ── STAFFING ─────────────────────────────────────────── #}
+<section class="staff" aria-labelledby="staff-h">
+  <div class="wrap staff__in">
+    <div>
+      <h2 id="staff-h" class="h2">Need extra hands on a tech project?</h2>
+      <p>We provide skilled people for a specific service, for as long as your project needs them.</p>
+    </div>
+    <ul class="roles">
+      <li>Python & Django developers</li>
+      <li>Frontend & website developers</li>
+      <li>n8n & automation engineers</li>
+      <li>AI / ML developers</li>
+      <li>SEO & marketing specialists</li>
+    </ul>
+    <a class="btn btn--light" href="{% url 'service_detail' 'tech-staffing' %}">How staffing works</a>
+  </div>
+</section>
+
+{# ── PROCESS (a real sequence) ───────────────────────── #}
+<section class="sec" aria-labelledby="proc-h">
+  <div class="wrap">
+    <div class="sec__head">
+      <h2 id="proc-h" class="h2">How a project runs</h2>
+    </div>
+    <ol class="steps">
+      <li><h3>Talk</h3><p>A short call about your business, customers and goals.</p></li>
+      <li><h3>Proposal</h3><p>A clear scope, timeline and price — fixed for projects, monthly for retainers.</p></li>
+      <li><h3>Build</h3><p>We design, build and test, sharing progress as we go.</p></li>
+      <li><h3>Launch & grow</h3><p>Go live, then improve every month with SEO, automation and support.</p></li>
+    </ol>
+  </div>
+</section>
+
+{# ── FAQ ──────────────────────────────────────────────── #}
+{% if faqs %}
+<section class="sec sec--tint" aria-labelledby="faq-h">
+  <div class="wrap split">
+    <div class="split__aside">
+      <h2 id="faq-h" class="h2">Questions people ask</h2>
+      <p class="lede">Something else on your mind? <a class="link" href="{{ site.whatsapp_link }}" target="_blank" rel="noopener">Ask us on WhatsApp</a>.</p>
+    </div>
+    {% include "core/partials/faq.html" %}
+  </div>
+</section>
+{% endif %}
+
+{# ── CONTACT ──────────────────────────────────────────── #}
+<section class="sec" id="contact" aria-labelledby="ct-h">
+  <div class="wrap contact">
+    <div class="contact__aside">
+      <h2 id="ct-h" class="h2">Tell us what you're building</h2>
+      <p class="lede">Share a few details and we’ll get back to you with next steps. For a quicker reply, message us on WhatsApp.</p>
+      {% include "core/partials/contact_methods.html" %}
+    </div>
+    {% include "core/partials/lead_form.html" with source="home" %}
+  </div>
+</section>
+{% endblock %}

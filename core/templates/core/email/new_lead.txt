@@ -1,0 +1,13 @@
+New enquiry from the website
+
+Name:     {{ lead.name }}
+Email:    {{ lead.email }}
+Phone:    {{ lead.phone|default:"—" }}
+Business: {{ lead.company|default:"—" }}
+Website:  {{ lead.website|default:"—" }}
+Service:  {{ lead.service|default:"Not sure yet" }}
+Page:     {{ lead.source_page|default:"—" }}
+
+{{ lead.message }}
+
+{% if admin_url %}Open in admin: {{ admin_url }}{% endif %}

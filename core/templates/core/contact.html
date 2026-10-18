@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block title %}Contact — {{ site.agency_name }}{% endblock %}
+{% block meta_description %}Start a project with {{ site.agency_name }}: websites, automation, chatbots and SEO. Message us on WhatsApp or send an enquiry.{% endblock %}
+{% block content %}
+<section class="sec">
+  <div class="wrap contact contact--page">
+    <div class="contact__aside">
+      <h1 class="h1">Start a project</h1>
+      <p class="lede">Tell us what you'd like to build or improve. We'll get back to you with questions or a clear proposal.</p>
+      {% include "core/partials/contact_methods.html" %}
+    </div>
+    {% include "core/partials/lead_form.html" with source="contact" %}
+  </div>
+</section>
+{% endblock %}

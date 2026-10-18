@@ -1,0 +1,8 @@
+{% load ui %}<ul class="methods">
+  <li><a class="method method--wa" href="{{ site.whatsapp_link }}" target="_blank" rel="noopener">
+    <span class="method__icon">{% icon 'whatsapp' 20 %}</span><span><b>WhatsApp</b>{{ site.phone }}</span></a></li>
+  <li><a class="method" href="mailto:{{ site.email }}">
+    <span class="method__icon">{% icon 'mail' 20 %}</span><span><b>Email</b>{{ site.email }}</span></a></li>
+  <li><a class="method" href="tel:+{{ site.whatsapp_number }}">
+    <span class="method__icon">{% icon 'phone' 20 %}</span><span><b>Call</b>{{ site.phone }}</span></a></li>
+</ul>

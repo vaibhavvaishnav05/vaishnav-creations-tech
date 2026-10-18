@@ -1,0 +1,81 @@
+{% extends "core/base.html" %}
+{% load ui %}
+{% block title %}{{ service.title }} — {{ site.agency_name }}{% endblock %}
+{% block meta_description %}{{ service.meta_description|default:service.summary }}{% endblock %}
+{% block og_title %}{{ service.title }} — {{ site.agency_name }}{% endblock %}
+{% block head %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Service","name":{{ service.title|jsonld }},"description":{{ service.summary|jsonld }},"provider":{"@type":"ProfessionalService","name":{{ site.agency_name|jsonld }},"url":{{ SITE_URL|add:"/"|jsonld }}},"areaServed":"Worldwide"}
+</script>
+{% if faqs %}<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for f in faqs %}{"@type":"Question","name":{{ f.question|jsonld }},"acceptedAnswer":{"@type":"Answer","text":{{ f.answer|jsonld }}}}{% if not forloop.last %},{% endif %}{% endfor %}]}
+</script>{% endif %}
+{% endblock %}
+{% block content %}
+<section class="phead">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="{% url 'services' %}">Services</a>{% icon 'chevron' 14 %}<span aria-current="page">{{ service.title }}</span></nav>
+    <div class="phead__svc">
+      <span class="svc__icon svc__icon--lg">{% icon service.icon 28 %}</span>
+      <span class="tag tag--{{ service.billing }}">{{ service.get_billing_display }}</span>
+    </div>
+    <h1 class="h1">{{ service.title }}</h1>
+    <p class="lede">{{ service.summary }}</p>
+    <div class="btn-row">
+      <a class="btn btn--primary btn--lg" href="#enquire">Discuss your project</a>
+      <a class="btn btn--wa btn--lg" href="{{ site.whatsapp_link }}" target="_blank" rel="noopener">{% icon 'whatsapp' 18 %}WhatsApp us</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--tight">
+  <div class="wrap detail">
+    <div class="prose">{{ service.intro|linebreaks }}
+      {% if service.tool_list %}
+      <h2 class="h3">Tools we use</h2>
+      <ul class="tools">{% for t in service.tool_list %}<li>{{ t }}</li>{% endfor %}</ul>
+      {% endif %}
+    </div>
+    <aside class="incl">
+      <h2 class="h3">What's included</h2>
+      <ul class="ticks">{% for d in service.deliverable_list %}<li>{% icon 'check' 18 %}{{ d }}</li>{% endfor %}</ul>
+    </aside>
+  </div>
+</section>
+
+{% if related_work %}
+<section class="sec sec--tint">
+  <div class="wrap">
+    <h2 class="h2">Related client work</h2>
+    <div class="wgrid wgrid--sm">{% for w in related_work %}{% include "core/partials/work_card.html" %}{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+
+{% if faqs %}
+<section class="sec">
+  <div class="wrap split">
+    <div class="split__aside"><h2 class="h2">Questions about {{ service.title }}</h2></div>
+    {% include "core/partials/faq.html" %}
+  </div>
+</section>
+{% endif %}
+
+<section class="sec sec--tint" id="enquire">
+  <div class="wrap contact">
+    <div class="contact__aside">
+      <h2 class="h2">Discuss your {{ service.title|lower }} project</h2>
+      <p class="lede">Tell us a little about your business and what you need.</p>
+      {% include "core/partials/contact_methods.html" %}
+    </div>
+    {% include "core/partials/lead_form.html" with source=request.path %}
+  </div>
+</section>
+
+<section class="sec sec--tight">
+  <div class="wrap">
+    <h2 class="h3">Other services</h2>
+    <ul class="others">{% for s in other_services %}<li><a href="{{ s.get_absolute_url }}">{% icon s.icon 18 %}{{ s.title }}</a></li>{% endfor %}</ul>
+  </div>
+</section>
+{% endblock %}

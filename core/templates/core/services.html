@@ -1,0 +1,26 @@
+{% extends "core/base.html" %}
+{% load ui %}
+{% block title %}Services — {{ site.agency_name }}{% endblock %}
+{% block meta_description %}Website development, SEO/GEO/AEO, n8n automation, WhatsApp chatbots, AI/ML, CRM & ERP, digital marketing and tech staffing.{% endblock %}
+{% block content %}
+<section class="phead">
+  <div class="wrap">
+    <h1 class="h1">Services</h1>
+    <p class="lede">Eight services that work together: build the website, automate what happens behind it, and bring in customers every month.</p>
+  </div>
+</section>
+<section class="sec sec--tight">
+  <div class="wrap sgrid">
+    {% for s in services %}
+    <a class="scard" href="{{ s.get_absolute_url }}">
+      <div class="scard__top"><span class="svc__icon">{% icon s.icon 22 %}</span><span class="tag tag--{{ s.billing }}">{{ s|billing_short }}</span></div>
+      <h2>{{ s.title }}</h2>
+      <p>{{ s.summary }}</p>
+      <ul>{% for d in s.deliverable_list|slice:":4" %}<li>{% icon 'check' 16 %}{{ d }}</li>{% endfor %}</ul>
+      <span class="link">Details</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% include "core/partials/cta_band.html" %}
+{% endblock %}

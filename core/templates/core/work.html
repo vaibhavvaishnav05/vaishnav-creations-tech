@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+{% block title %}Client work — {{ site.agency_name }}{% endblock %}
+{% block meta_description %}Websites and WhatsApp chatbots built by {{ site.agency_name }} for hotels, law practices, furniture and interior brands and more.{% endblock %}
+{% block content %}
+<section class="phead">
+  <div class="wrap">
+    <h1 class="h1">Client work</h1>
+    <p class="lede">A selection of live websites and chatbots from our {{ site.clients_count }} clients.</p>
+  </div>
+</section>
+<section class="sec sec--tight">
+  <div class="wrap">
+    {% if industries|length > 1 %}
+    <div class="filters" role="group" aria-label="Filter by industry" data-filters>
+      <button type="button" class="chip is-on" data-filter="all" aria-pressed="true">All work</button>
+      {% for i in industries %}<button type="button" class="chip" data-filter="{{ i.slug }}" aria-pressed="false">{{ i.name }}</button>{% endfor %}
+    </div>
+    {% endif %}
+    {% if items %}
+    <div class="wgrid" data-grid>{% for w in items %}{% include "core/partials/work_card.html" %}{% endfor %}</div>
+    <p class="empty" data-empty hidden>No projects in this industry yet.</p>
+    {% else %}
+    <p class="empty">Client projects will appear here soon.</p>
+    {% endif %}
+  </div>
+</section>
+{% include "core/partials/cta_band.html" %}
+{% endblock %}

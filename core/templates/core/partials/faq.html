@@ -1,0 +1,8 @@
+{% load ui %}<div class="faq">
+  {% for f in faqs %}
+  <details class="faq__item"{% if forloop.first %} open{% endif %}>
+    <summary><span>{{ f.question }}</span>{% icon 'chevron' 18 'faq__chev' %}</summary>
+    <div class="faq__a"><p>{{ f.answer|linebreaksbr }}</p></div>
+  </details>
+  {% endfor %}
+</div>

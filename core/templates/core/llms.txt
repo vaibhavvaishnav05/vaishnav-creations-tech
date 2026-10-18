@@ -1,0 +1,23 @@
+# {{ site.agency_name|safe }}
+
+> {{ site.meta_description|safe }}
+
+{{ site.about_text|safe }}
+
+Clients: {{ site.clients_count }} across {{ site.countries_count }} countries.
+Contact: {{ site.email }} | WhatsApp {{ site.phone }} | {{ SITE_URL }}/contact/
+
+## Services
+{% for s in services %}- [{{ s.title|safe }}]({{ SITE_URL }}{{ s.get_absolute_url }}): {{ s.summary|safe }} Billing: {{ s.get_billing_display }}.
+{% endfor %}
+## Industries
+{% for i in industries %}- {{ i.name|safe }}: {{ i.blurb|safe }}
+{% endfor %}
+## Selected client work
+{% for w in work %}- {{ w.client_name|safe }}{% if w.location %} ({{ w.location|safe }}){% endif %}: {{ w.summary|safe }} {{ w.live_url }}
+{% endfor %}
+## FAQ
+{% for f in faqs %}
+### {{ f.question|safe }}
+{{ f.answer|safe }}
+{% endfor %}

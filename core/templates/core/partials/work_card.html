@@ -1,0 +1,24 @@
+{% load ui %}<article class="wcard" data-industry="{{ w.industry.slug|default:'other' }}" data-type="{{ w.project_type }}">
+  <div class="wcard__top">
+    <div class="wcard__bar">{% if w.is_bot %}{% icon 'whatsapp' 14 %}<span>WhatsApp chatbot</span>{% else %}<span class="dot" aria-hidden="true"></span><span>{{ w.domain }}</span>{% endif %}</div>
+    <div class="wcard__brand">
+      {% if w.logo_url %}<img src="{{ w.logo_url }}" alt="{{ w.client_name }} logo" loading="lazy">
+      {% else %}<span class="mono" aria-hidden="true">{{ w.client_name|initials }}</span>{% endif %}
+    </div>
+  </div>
+  <div class="wcard__body">
+    <h3>{{ w.client_name }}</h3>
+    <p class="wcard__meta">{{ w.get_project_type_display }}{% if w.industry %}, {{ w.industry.name }}{% endif %}{% if w.location %}<br>{{ w.location }}{% endif %}</p>
+    <p>{{ w.summary }}</p>
+    {% if w.has_verified_testimonial %}
+    <figure class="quote">
+      <blockquote>{{ w.testimonial_quote }}</blockquote>
+      <figcaption>{{ w.testimonial_author }}{% if w.testimonial_role %}, {{ w.testimonial_role }}{% endif %}</figcaption>
+    </figure>
+    {% endif %}
+    <div class="wcard__links">
+      {% if w.live_url %}<a class="link" href="{{ w.live_url }}" target="_blank" rel="noopener">{% if w.is_bot %}{{ w.link_label|default:"Try the bot" }}{% else %}{{ w.link_label|default:"Visit website" }}{% endif %}{% icon 'external' 14 %}</a>{% endif %}
+      {% if w.case_study_url %}<a class="link" href="{{ w.case_study_url }}" target="_blank" rel="noopener">Case study{% icon 'external' 14 %}</a>{% endif %}
+    </div>
+  </div>
+</article>
